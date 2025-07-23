@@ -1,8 +1,8 @@
 import random
 import tkinter as tk
 
-nreinas = 4
-nmax = 6
+nreinas = 9
+nmax = 40
 tamtabu = 2
 
 # Generar solución inicial válida

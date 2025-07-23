@@ -1,19 +1,20 @@
 import random
 import math
+import tkinter as tk
 
-# Lista de ciudades o nodos
+# Lista de ciudades
 ciudades = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-cantciudades = len(ciudades)
+cantciudades = len(ciudades) #nodos
 
 # Matriz de costos
 matrizcostos = [
-    [0, 12, 0, 10, 0, 12, 0],
-    [12, 0, 12, 8, 0, 0, 0],
-    [0, 12, 0, 11, 11, 0, 10],
-    [10, 8, 11, 0, 3, 9, 0],
-    [0, 0, 11, 3, 0, 7, 6],
-    [12, 0, 0, 9, 7, 0, 9],
-    [0, 0, 10, 0, 6, 9, 0]
+# A   B   C   D   E   F
+[ 0, 15,  0,  8,  0, 12],  # A
+[15,  0, 13,  7,  9,  7],  # B
+[ 0, 13,  0,  0,  9, 16],  # C
+[ 8,  7,  0,  0,  8,  7],  # D
+[ 0,  9,  9,  8,  0,  7],  # E
+[12,  7, 16,  7,  7,  0]   # F
 ]
 
 def CalcularCosto(ruta):
@@ -35,7 +36,6 @@ def RutaInicialValida():
             return list(perm)
     return None
 
-# Escoge nodo inicial y final usando ruleta
 def EscogerIndicesPorRuleta(nodosdisponibles):
     prob = 1 / len(nodosdisponibles)
     ruleta = []
@@ -50,7 +50,7 @@ def EscogerIndicesPorRuleta(nodosdisponibles):
     return nodosdisponibles[-1]
 
 def ObtenerVecino(ruta):
-    for intento in range(10):  # Hasta 10 intentos para generar un vecino distinto
+    for intento in range(10):
         nodosvalidos = ruta[1:-1]
         nodoini = EscogerIndicesPorRuleta(nodosvalidos)
         idxini = ruta.index(nodoini)
@@ -64,62 +64,96 @@ def ObtenerVecino(ruta):
         if idxini >= idx_fin:
             continue
 
-        subruta = ruta[idxini:idx_fin + 1]
-        subruta_invertida = subruta[::-1]
-
-        nueva = ruta[:idxini] + subruta_invertida + ruta[idx_fin + 1:]
+        subruta = ruta[idxini:idx_fin + 1][::-1]
+        nueva = ruta[:idxini] + subruta + ruta[idx_fin + 1:]
 
         if nueva != ruta and CalcularCosto(nueva) != float('inf'):
             return nueva
-    return ruta 
+    return ruta
 
+# Algoritmo de Recocido Simulado
 def Recocido():
     rutaactual = RutaInicialValida()
     if rutaactual is None:
         print("No se encontró una ruta inicial válida.")
-        return
+        return [], float('inf'), []
 
     zc = CalcularCosto(rutaactual)
     mejorruta = rutaactual[:]
     mejorcosto = zc
 
-    # Temperaturas
     t1 = 0.2 * zc
     T = [t1]
     for _ in range(4):
         T.append(0.5 * T[-1])
 
-    print("*** Ruta inicial:", [ciudades[i] for i in rutaactual], "Costo:", zc)
-        
+    resultados = [("Iteración", "Ruta actual", "Costo", "T", "Δ", "Prob. aceptación", "r", "Acción")]
+
     for i, temp in enumerate(T):
-        print(f"\n*** Iteración {i + 1} con T = {round(temp, 2)}")
         vecino = ObtenerVecino(rutaactual)
         zn = CalcularCosto(vecino)
 
-        print("*** Ruta candidata:", [ciudades[i] for i in vecino], "Costo:", zn)
+        delta = zc - zn
+        probacept = round(math.exp(delta / temp), 3) if delta < 0 else 1.0
+        r = round(random.random(), 3)
+        accion = ""
 
         if zn < zc:
-            print("*** Mejor vecino encontrado (mejor costo):", zn)
+            accion = "Mejor vecino"
             rutaactual = vecino
             zc = zn
             if zn < mejorcosto:
                 mejorruta = vecino
                 mejorcosto = zn
         else:
-            delta = zc - zn
-            probacept = math.exp(delta / temp)
-            r = random.random()
-            print(f" Zn > Zc. Δ={delta:.2f}, Probabilidad de aceptación={round(probacept, 3)}, r={round(r, 3)}")
             if r < probacept:
-                print(" *** Se acepta solución peor por probabilidad. ***")
-                ruta_actual = vecino
+                accion = "Acepta peor"
+                rutaactual = vecino
                 zc = zn
             else:
-                print(" *** Rechazada. Se mantiene la anterior. ***")
+                accion = "Rechaza"
 
-        print("*** Ruta actual:", [ciudades[i] for i in ruta_actual], "Costo:", zc)
+        resultados.append((
+            i + 1,
+            '-'.join([ciudades[j] for j in rutaactual]),
+            zc,
+            round(temp, 2),
+            round(delta, 2),
+            probacept,
+            r,
+            accion
+        ))
 
-    print("\n*** Mejor ruta encontrada:", [ciudades[i] for i in mejorruta])
-    print("*** Costo total:", mejorcosto)
+    return [ciudades[i] for i in mejorruta], mejorcosto, resultados
 
-solucion = Recocido()
+# Tkinter: tabla de resultados
+class Tabla:
+    def __init__(self, ventana, datos):
+        self.filas = len(datos)
+        self.columnas = len(datos[0]) if self.filas > 0 else 0
+
+        for i in range(self.filas):
+            for j in range(self.columnas):
+                e = tk.Entry(ventana, width=18, fg='black',
+                             font=('Arial', 10))
+                e.grid(row=i, column=j)
+                e.insert(tk.END, str(datos[i][j]))
+
+# Ejecutar
+mejorruta, mejorcosto, datos_tabla = Recocido()
+
+# Interfaz
+ventana = tk.Tk()
+ventana.title("Recocido Simulado - Agente Viajero")
+
+tabla = Tabla(ventana, datos_tabla)
+
+etiqueta = tk.Label(
+    ventana,
+    text=f"\nMejor ruta: {'-'.join(mejorruta)}\nCosto total: {mejorcosto}",
+    font=('Arial', 12, 'bold'),
+    fg='blue'
+)
+etiqueta.grid(row=len(datos_tabla) + 1, column=0, columnspan=8)
+
+ventana.mainloop()

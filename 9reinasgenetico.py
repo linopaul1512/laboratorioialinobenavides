@@ -1,7 +1,6 @@
 import random
 import pandas as pd
 
-# Parámetros
 nreinas = 4
 tampoblacion = 6
 nmax = 5
