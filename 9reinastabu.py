@@ -3,7 +3,7 @@ import tkinter as tk
 import sys
 
 nreinas = 9 
-nmax = 1000
+nmax = 6
 tamtabu = 2
 
 # Redirigir salida a archivo de texto
@@ -118,7 +118,7 @@ sys.stdout.close()
 def MostrarTableroTkinter(solucion):
     ventana = tk.Tk()
     ventana.title("Tablero de N Reinas - Mejor Solución")
-    tamaño = 50
+    
     colores = ["white", "gray"]
 
     for fila in range(nreinas):

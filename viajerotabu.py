@@ -145,3 +145,4 @@ etiqueta_resumen = tk.Label(ventana, text=texto_resumen, font=('Arial', 12, 'bol
 etiqueta_resumen.grid(row=len(resultados) + 1, column=0, columnspan=3)
 
 ventana.mainloop()
+

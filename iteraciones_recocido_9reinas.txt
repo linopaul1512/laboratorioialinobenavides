@@ -1,0 +1,70 @@
+****** RECOSIDO SIMULADO - PROBLEMA DE LAS 9 REINAS ****
+
+Solución inicial: [8, 2, 5, 3, 4, 7, 1, 6, 9] Colisiones: 4
+. . . . . . ♕ . . 
+. ♕ . . . . . . . 
+. . . ♕ . . . . . 
+. . . . ♕ . . . . 
+. . ♕ . . . . . . 
+. . . . . . . ♕ . 
+. . . . . ♕ . . . 
+♕ . . . . . . . . 
+. . . . . . . . ♕ 
+
+************ ETAPA 1 | Temperatura: 0.2 ************
+
+[Iteración 0] Zn = 10, Zc = 4, Prob = 0.0, Rand = 0.4837
+RECHAZADO
+
+[Iteración 1] Zn = 5, Zc = 4, Prob = 0.0067, Rand = 0.3568
+RECHAZADO
+
+[Iteración 2] ACEPTADO DIRECTO → Zn = 3 < Zc = 3
+[Iteración 3] Zn = 3, Zc = 3, Prob = 1.0, Rand = 0.7639
+ACEPTADO por probabilidad
+
+[Iteración 4] Zn = 4, Zc = 3, Prob = 0.0067, Rand = 0.8681
+RECHAZADO
+
+[Iteración 5] Zn = 4, Zc = 3, Prob = 0.0067, Rand = 0.8029
+RECHAZADO
+
+************ ETAPA 2 | Temperatura: 0.5 ************
+
+[Iteración 0] Zn = 5, Zc = 3, Prob = 0.0183, Rand = 0.128
+RECHAZADO
+
+[Iteración 1] Zn = 5, Zc = 3, Prob = 0.0183, Rand = 0.1431
+RECHAZADO
+
+[Iteración 2] Zn = 7, Zc = 3, Prob = 0.0003, Rand = 0.8768
+RECHAZADO
+
+[Iteración 3] Zn = 3, Zc = 3, Prob = 1.0, Rand = 0.9532
+ACEPTADO por probabilidad
+
+[Iteración 4] Zn = 3, Zc = 3, Prob = 1.0, Rand = 0.984
+ACEPTADO por probabilidad
+
+[Iteración 5] ACEPTADO DIRECTO → Zn = 2 < Zc = 2
+************ ETAPA 3 | Temperatura: 0.5 ************
+
+[Iteración 0] Zn = 5, Zc = 2, Prob = 0.0025, Rand = 0.8247
+RECHAZADO
+
+[Iteración 1] ACEPTADO DIRECTO → Zn = 0 < Zc = 0
+
+✓ Solución óptima encontrada en etapa 3
+*********** RESULTADO FINAL ***********
+ Mejor solución encontrada: [8, 5, 3, 9, 7, 2, 4, 6, 1]
+ Colisiones: 0
+. . . . . . . . ♕ 
+. . . . . ♕ . . . 
+. . ♕ . . . . . . 
+. . . . . . ♕ . . 
+. ♕ . . . . . . . 
+. . . . . . . ♕ . 
+. . . . ♕ . . . . 
+♕ . . . . . . . . 
+. . . ♕ . . . . . 
+
